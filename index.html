@@ -54,6 +54,8 @@
       background-color: var(--blue);
       color: white;
     }
+    
+
 
     section {
       padding: 1rem;
@@ -149,6 +151,16 @@
       color: red;
       margin-top: 0.5rem;
     }
+    
+        .box {
+      border: 0.10px dashed var(--pink);
+      
+      background-color: #fff0f8;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s;
+    
+    
   </style>
 </head>
 <body>
@@ -165,7 +177,23 @@
   <!-- Checkout Section -->
   <section id="checkoutSection">
     <h2>ဈေးဝယ်မည်</h2>
-    <label for="product">ဝယ်ရန်ရွေးချယ်ပါ</label>
+    
+    
+    <label for="product" 
+      <div class="box" id="note">
+        <div>
+          <h4><b><i><u>Note - သတိပြုရန်</u></i</b></h4>
+          <ul type="square">
+            <li>2x Dia💎 သည် တစ်မျိုးကိုတစ်ခါသာဝယ်ယူနိုင်ပါသည် Seller များဆီမှာဝယ်ယူဖူးပါကထပ်မဝယ်ပါနှင့် </li>
+            <li>ဂိမ်း ID နဲ့ Sever ကိုမှန်အောင်ထည့်ပေးပါ </li>
+            <li>ဂိမ်းအကြောင့်နာမည်က ဂိမ်း id နဲ့တိုက်စစ်ဖို့ပါအကြမ်းဖျင်းပဲရေးလဲရပါတယ်</li>
+      
+      
+      
+          </ul>
+        </div>
+     </div>
+    <label for="product">Diamond/WeeklyPass/Twilight  ဝယ်ရန်ရွေးချယ်ပါ</label>
     <select id="product" name="product" required>
       <option value="">ဝယ်မည့်ပမာဏ</option>
       <option value="Weekly Pass" data-price="6000">Weekly Pass - 6000 Ks</option>
@@ -174,9 +202,34 @@
           <!-- ဈေးနှုန်းထပ်ထည့်ရမယ် -->
       
       
-      <option value="Diamond Pack 2" data-price="10000">Diamond Pack 2 - 10000 Ks</option>
-      <option value="Diamond Pack 3" data-price="15000">Diamond Pack 3 - 15000 Ks</option>
-       <option value="Diamond Pack 1" data-price="5000">Diamond Pack 1 - 5000 Ks</option>
+     <option value="  TwilightPass " data-price="33000"> Twilight Pass -  33000Ks</option>
+<option value="2xDia💎50 " data-price="3250">2x Dia 💎 50 - 3250Ks</option>
+<option value="2xDia💎150" data-price="9550"> 2x Dia 💎 150 - 9550Ks</option>
+<option value="2xDia💎250" data-price="15500"> 2x Dia 💎 250 -  15500Ks</option>
+<option value="2xDia💎500" data-price=" 32500"> 2x Dia 💎 500 -  32500Ks</option>
+
+
+<option value=" 11💎 " data-price=" 950"> 💎11 -  950Ks</option>
+<option value="  22💎 " data-price="1900">💎22 -  1900Ks</option>
+<option value="  33💎 " data-price="2800 "> 💎33 - 2800Ks</option>
+<option value="  44💎" data-price="3700 ">💎44 -  3700Ks</option>
+<option value="  56💎" data-price=" 4500">💎56 -  4500Ks</option>
+<option value="  86💎" data-price=" 4950"> 💎86 -  4950Ks</option>
+<option value=" 112💎 " data-price=" 8500">💎112 -  8500Ks</option>
+<option value="172💎  " data-price=" 9800">💎172 -  9800Ks</option>
+<option value=" 257💎 " data-price=" 14200">💎257 -  14200Ks</option>
+<option value="  343💎" data-price=" 19200">💎343 -  19200Ks</option>
+<option value="  429💎 " data-price="24000 "> 💎429 - 24000 Ks</option>
+<option value=" 514💎  " data-price=" 29000">💎514 -  29000Ks</option>
+<option value="  600💎 " data-price=" 33800">💎600 - 33800 Ks</option>
+<option value=" 706💎  " data-price=" 38800"> 💎706 - 38800Ks</option>
+<option value="  878💎 " data-price=" 48350"> 💎878 - 48350Ks</option>
+<option value=" 963💎  " data-price=" 53000"> 💎963 - 53000Ks</option>
+<option value="  1049💎 " data-price=" 58550">💎1049 - 58550Ks</option>
+<option value="  2195💎 " data-price=" 119000"> 💎2195 -  119000Ks</option>
+<option value=" 3688💎  " data-price=" 196000">💎3688 -  196000Ks</option>
+<option value=" 5532💎  " data-price=" 295000"> 💎5532 -  295000Ks</option>
+<option value=" 9288💎  " data-price=" 495000"> 💎9288 -  495000Ks</option>
       
       
       <!-- ဈေးနှုန်းထပ်ထည့်ရမယ် -->
@@ -190,37 +243,46 @@
 
     <!-- Checkout Form -->
     <form id="checkoutForm" novalidate>
-      <label for="gameName">Game Name</label>
+      <label for="gameName">Game Account Name</label>
       <input type="text" id="gameName" name="gameName" required />
 
       <label for="gameId">Game ID</label>
       <input type="number" id="gameId" name="gameId" required pattern="\d+" title="Game ID must be numeric" />
 
-      <label for="gameServer">Game Server</label>
+      <label for="gameServer">Server Id</label>
       <input type="number" id="gameServer" name="gameServer" required />
 
-      <label for="telegramUsername">Telegram Username</label>
+      <label for="telegramUsername">
+            
+      (ဝယ်ယူမှုအောင်မြင်ကြောင်းအသိပေးနိုင်ရန််။)
+</br>
+ Telegram Username ( @ ) ပါထည့်ရေးပါ
+      
+      
+
+      
+      </label>
       <input type="text" id="telegramUsername" name="telegramUsername" required pattern="^@[a-zA-Z0-9_]{5,}$" title="Telegram username must start with @ and be at least 6 characters" />
 
-      <label for="paymentMethod">Payment Method</label>
+      <label for="paymentMethod">ငွေပေးချေရန်နည်းလမ်း </label>
       <select id="paymentMethod" name="paymentMethod" required>
-        <option value="">-- Please choose --</option>
+        <option value="">ငွေပေးချေရန်နည်းလမ်းရွေးပါ</option>
         <option value="KBZ">KBZ Pay</option>
         <option value="WavePay">Wave Pay</option>
-        <option value="CBPay">CB Pay</option>
+        <option value="AYA">AYA Pay</option>
       </select>
 
       <!-- Account Info Display -->
       <div id="accountInfo" style="display:none; margin-top: 1rem;">
-        <label>Account Name</label>
-        <div class="copy-box" id="accountName">Your Shop Account</div>
-
-        <label>Phone Number <small>(click to copy)</small></label>
-        <div class="copy-box" id="phoneNumber">09XXXXXXXXX</div>
-      </div>
+  <label>Account Name</label>
+  <div class="copy-box" id="accountName">Your Shop Account</div>
+  
+  <label>Phone Number <small>(click to copy)</small></label>
+  <div class="copy-box" id="phoneNumber">09XXXXXXXXX</div>
+</div>
 
       <label for="transferCode">ငွေလွှဲပြေစာနောက်ဆုံးဂဏန်း 5 လုံး</label>
-      <input type="number" id="transferCode" name="transferCode" required maxlength="5" pattern="\d{5}" title="Please enter exactly 5 digits" />
+      <input type="text" id="transferCode" name="transferCode" required maxlength="5" pattern="\d{5}" title="Please enter exactly 5 digits" />
 
       <div class="error" id="formError" aria-live="polite"></div>
 
@@ -238,7 +300,7 @@
   <footer>
     <h3>ဆက်သွယ်ရန်</h3>
     <p>
-      Telegram Channel: <a href="https://t.me/kun_Diastore" target="_blank">🔰Kun Dia-store🔰</a><br>
+      Telegram Channel: <a href="https://t.me/kun_Diastore" target="_blank">🔰Kun Dia-store🔰</a> <br><br>
       Telegram Account: <a href="https://t.me/Kun0_0" target="_blank">🩷 Kun Store 🩷</a>
     </p>
   </footer>
@@ -266,9 +328,31 @@
     });
 
     document.getElementById('paymentMethod').addEventListener('change', function() {
-      const accountInfo = document.getElementById('accountInfo');
-      accountInfo.style.display = this.value ? 'block' : 'none';
-    });
+  const accountInfo = document.getElementById('accountInfo');
+  const accountName = document.getElementById('accountName');
+  const phoneNumber = document.getElementById('phoneNumber');
+  
+  switch (this.value) {
+    case 'KBZ':
+      accountName.innerText = 'Aung Thet Paing Phyo';
+      phoneNumber.innerText = '09677545045';
+      accountInfo.style.display = 'block';
+      break;
+    case 'WavePay':
+      accountName.innerText = 'Zar Ni Aung';
+      phoneNumber.innerText = '09677545045';
+      accountInfo.style.display = 'block';
+      break;
+    case 'AYA':
+      accountName.innerText = 'Aung Thet Paing Phyo';
+      phoneNumber.innerText = '09677545045';
+      accountInfo.style.display = 'block';
+      break;
+    default:
+      accountInfo.style.display = 'none';
+      break;
+  }
+});
 
     document.getElementById('phoneNumber').addEventListener('click', function() {
       navigator.clipboard.writeText(this.innerText).then(() => {
@@ -350,12 +434,12 @@
     const result = await response.json();
     
     if (result.ok) {
-      alert('Checkout အချက်အလက်များကို Telegram သို့ ပို့ပြီးပါပြီ။ ကျေးဇူးတင်ပါတယ်။');
+      alert('အော်ဒါတင်ပြိးပါပြီ 3မိနစ်အတွင် Telegram မှာပြန်လည်အကြောင်းကြားပေးပါမယ်။  ');
       this.reset();
       document.getElementById('price').value = '';
       document.getElementById('accountInfo').style.display = 'none';
     } else {
-      alert(`Telegram ပို့မှုတွင် ပြဿနာတက်ပါသည်။\nError: ${result.description}`);
+      alert(`အော်ဒါတင်လို့မရပါ။\nError: ${result.description}`);
     }
   } catch (error) {
     alert('Network error ဖြစ်နေပါသည်။ ပြန်လည်စမ်းကြည့်ပါ။');
@@ -388,4 +472,4 @@
   </script>
 
 </body>
-</html>
+        </html>
