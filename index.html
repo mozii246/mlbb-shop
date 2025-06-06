@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MLBB Shop Checkout</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #purchaseHistory {
+      margin-top: 2rem;
+      border-top: 1px solid #ccc;
+      padding-top: 1rem;
+    }
+    .history-item {
+      border-bottom: 1px solid #ddd;
+      padding: 0.5rem 0;
+    }
+    .readonly-field {
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.copy-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.copy-btn:hover {
+  background-color: #45a049;
+}
+  </style>
+</head>
+<body>
+  <h1>MLBB Shop Checkout</h1>
+
+  <!-- Product Selection -->
+  <label for="product">ဈေးပစ္စည်းရွေးချယ်ပါ</label>
+  <select id="product" name="product" required>
+    <option value="">-- ဈေးပစ္စည်းရွေးပါ --</option>
+    <option value="Diamond Pack 1">Diamond Pack 1</option>
+    <option value="Diamond Pack 2">Diamond Pack 2</option>
+    <option value="Diamond Pack 3">Diamond Pack 3</option>
+  </select>
+
+  <label for="price">ဈေးနှုန်း</label>
+  <input type="text" id="price" name="price" readonly />
+
+  <!-- Checkout Form -->
+  <form id="checkoutForm" novalidate>
+    <label for="gameName">Game Name</label>
+    <input type="text" id="gameName" name="gameName" required />
+
+    <label for="gameId">Game ID</label>
+    <input type="text" id="gameId" name="gameId" required pattern="\d+" title="Game ID must be numeric" />
+
+    <label for="gameServer">Game Server</label>
+    <input type="text" id="gameServer" name="gameServer" required />
+
+    <label for="telegramUsername">Telegram Username</label>
+    <input type="text" id="telegramUsername" name="telegramUsername" required pattern="^@[a-zA-Z0-9_]{5,}$" title="Telegram username must start with @ and be at least 6 characters" />
+
+    <label for="paymentMethod">Payment Method</label>
+    <select id="paymentMethod" name="paymentMethod" required>
+      <option value="">-- Please choose --</option>
+      <option value="KBZ">KBZ Pay</option>
+      <option value="WavePay">Wave Pay</option>
+      <option value="CBPay">CB Pay</option>
+    </select>
+
+   <!-- Account Info Display -->
+<div id="accountInfo" style="display:none; margin-top: 1rem;">
+  <label>Account Name</label>
+  <div class="readonly-field" id="accountName">-</div>
+  
+  <label>Phone Number</label>
+  <div class="readonly-field">
+    <span id="phoneNumberText">-</span>
+    <button type="button" id="copyPhoneNumberBtn" class="copy-btn">Copy</button>
+  </div>
+</div>
+
+    <label for="transferCode">ငွေလွှဲပြေစာနောက်ဆုံးဂဏန်း 5 လုံး</label>
+    <input type="text" id="transferCode" name="transferCode" required maxlength="5" pattern="\d{5}" title="Please enter exactly 5 digits" />
+
+    <div class="error" id="formError" aria-live="polite" style="color:red; margin-top:0.5rem;"></div>
+
+    <button type="submit">Check Out</button>
+  </form>
+
+  <!-- Purchase History Display -->
+  <section id="purchaseHistory">
+    <h2>ဈေးဝယ်မှတ်တမ်းများ</h2>
+    <div id="historyList"></div>
+  </section>
+
+  <script>
+    const paymentAccounts = {
+      KBZ: {
+        accountName: "KBZ Account Name",
+        phoneNumber: "09612345678"
+      },
+      WavePay: {
+        accountName: "WavePay Account Name",
+        phoneNumber: "09787654321"
+      },
+      CBPay: {
+        accountName: "CB Pay Account Name",
+        phoneNumber: "09911223344"
+      }
+    };
+
+    const productPrices = {
+      "Diamond Pack 1": "5,000 MMK",
+      "Diamond Pack 2": "10,000 MMK",
+      "Diamond Pack 3": "20,000 MMK"
+    };
+
+    const productEl = document.getElementById("product");
+    const priceEl = document.getElementById("price");
+    const paymentMethodEl = document.getElementById("paymentMethod");
+    const accountInfoEl = document.getElementById("accountInfo");
+    const accountNameEl = document.getElementById("accountName");
+    const phoneNumberEl = document.getElementById("phoneNumber");
+    const form = document.getElementById("checkoutForm");
+    const formErrorEl = document.getElementById("formError");
+    const historyListEl = document.getElementById("historyList");
+
+    productEl.addEventListener("change", () => {
+      const selectedProduct = productEl.value;
+      priceEl.value = productPrices[selectedProduct] || "";
+    });
+
+    paymentMethodEl.addEventListener("change", () => {
+      const selected = paymentMethodEl.value;
+      if (selected && paymentAccounts[selected]) {
+        accountNameEl.textContent = paymentAccounts[selected].accountName;
+        phoneNumberEl.textContent = paymentAccounts[selected].phoneNumber;
+        accountInfoEl.style.display = "block";
+      } else {
+        accountNameEl.textContent = "-";
+        phoneNumberEl.textContent = "-";
+        accountInfoEl.style.display = "none";
+      }
+    });
+
+    const phoneNumberTextEl = document.getElementById("phoneNumberText");
+const copyPhoneNumberBtn = document.getElementById("copyPhoneNumberBtn");
+
+paymentMethodEl.addEventListener("change", () => {
+  const selected = paymentMethodEl.value;
+  if (selected && paymentAccounts[selected]) {
+    accountNameEl.textContent = paymentAccounts[selected].accountName;
+    phoneNumberTextEl.textContent = paymentAccounts[selected].phoneNumber;
+    accountInfoEl.style.display = "block";
+  } else {
+    accountNameEl.textContent = "-";
+    phoneNumberTextEl.textContent = "-";
+    accountInfoEl.style.display = "none";
+  }
+});
+
+copyPhoneNumberBtn.addEventListener("click", () => {
+  const phone = phoneNumberTextEl.textContent;
+  if (phone && phone !== "-") {
+    navigator.clipboard.writeText(phone).then(() => {
+      alert("ဖုန်းနံပါတ်ကို ကော်ပီလုပ်ပြီးပါပြီ။");
+    }).catch(() => {
+      alert("ဖုန်းနံပါတ်ကော်ပီလုပ်ရာတွင် အမှားဖြစ်ခဲ့သည်။");
+    });
+  }
+});
+
+    function savePurchaseHistory(purchase) {
+      const history = JSON.parse(localStorage.getItem("purchaseHistory") || "[]");
+      history.push(purchase);
+      localStorage.setItem("purchaseHistory", JSON.stringify(history));
+    }
+
+    function displayPurchaseHistory() {
+      const history = JSON.parse(localStorage.getItem("purchaseHistory") || "[]");
+      historyListEl.innerHTML = "";
+      if (history.length === 0) {
+        historyListEl.textContent = "ဈေးဝယ်မှတ်တမ်း မရှိသေးပါ။";
+        return;
+      }
+      history.forEach((item) => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `
+          <p><strong>ပစ္စည်း:</strong> ${item.product}</p>
+          <p><strong>ဈေးနှုန်း:</strong> ${item.price}</p>
+          <p><strong>Game Name:</strong> ${item.gameName}</p>
+          <p><strong>Game ID:</strong> ${item.gameId}</p>
+          <p><strong>Game Server:</strong> ${item.gameServer}</p>
+          <p><strong>Telegram Username:</strong> ${item.telegramUsername}</p>
+          <p><strong>Payment Method:</strong> ${item.paymentMethod}</p>
+          <p><strong>ငွေလွှဲပြေစာနောက်ဆုံးဂဏန်း 5 လုံး:</strong> ${item.transferCode}</p>
+          <p><small>ရက်စွဲ: ${new Date(item.date).toLocaleString()}</small></p>
+        `;
+        historyListEl.appendChild(div);
+      });
+    }
+
+    // Telegram Bot API details
+    const botToken = '8155469967:AAHSc9o65IsCiqufEBa_ZpGSCaunjpWDOho';
+    const chatId = '-4825966649';
+
+    function sendConfirmationToTelegram(purchase) {
+      const message = `
+<b>🛒 MLBB Shop Checkout</b>
+
+<b>ပစ္စည်း:</b> ${purchase.product}
+<b>ဈေးနှုန်း:</b> ${purchase.price}
+<b>Game Name:</b> ${purchase.gameName}
+<b>Game ID:</b> ${purchase.gameId}
+<b>Game Server:</b> ${purchase.gameServer}
+<b>Telegram Username:</b> ${purchase.telegramUsername}
+<b>Payment Method:</b> ${purchase.paymentMethod}
+<b>ငွေလွှဲပြေစာနောက်ဆုံးဂဏန်း 5 လုံး:</b> ${purchase.transferCode}
+
+<b>ရက်စွဲ:</b> ${new Date(purchase.date).toLocaleString()}
+`;
+
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+      const data = {
+        chat_id: chatId,
+        text: message,
+        parse_mode: "HTML"
+      };
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.ok) {
+          alert("Telegram Group ထဲကို အတည်ပြုချက် ပို့ပြီးပါပြီ။");
+        } else {
+          alert("Telegram Group ထဲကို ပို့ရာတွင် မအောင်မြင်ပါ။");
+          console.error(data);
+        }
+      })
+      .catch(error => {
+        alert("Telegram ပို့ရာတွင် Error ဖြစ်ပွားခဲ့သည်။");
+        console.error(error);
+      });
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      formErrorEl.textContent = "";
+
+      const transferCode = form.transferCode.value.trim();
+      if (!/^\d{5}$/.test(transferCode)) {
+        formErrorEl.textContent = "ငွေလွှဲပြေစာနောက်ဆုံးဂဏန်း 5 လုံးကိုမှန်ကန်စွာထည့်ပါ။";
+        form.transferCode.focus();
+        return;
+      }
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const purchase = {
+        product: productEl.value,
+        price: priceEl.value,
+        gameName: form.gameName.value.trim(),
+        gameId: form.gameId.value.trim(),
+        gameServer: form.gameServer.value.trim(),
+        telegramUsername: form.telegramUsername.value.trim(),
+        paymentMethod: paymentMethodEl.value,
+        transferCode: transferCode,
+        date: new Date().toISOString()
+      };
+
+      savePurchaseHistory(purchase);
+      sendConfirmationToTelegram(purchase);
+      displayPurchaseHistory();
+
+      form.reset();
+      productEl.value = "";
+      priceEl.value = "";
+      accountInfoEl.style.display = "none";
+
+      alert("Checkout အောင်မြင်ပါသည်။");
+    });
+
+    displayPurchaseHistory();
+  </script>
+</body>
+</html>
